@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
 use App\Models\Department;
 use App\Models\Employee;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,6 +22,7 @@ class SupervisorFactory extends Factory
         return [
             'employee_id' => Employee::factory(),
             'department_id' => Department::factory(),
+            'company_id' => Company::factory()
         ];
     }
 }

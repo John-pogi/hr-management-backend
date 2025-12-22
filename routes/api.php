@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CompanyEmployeeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DtrController;
 use App\Http\Controllers\EmployeeController;
@@ -20,6 +21,9 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 
 Route::apiResource('companies',                CompanyController::class);
+Route::apiResource('companies.employees', CompanyEmployeeController::class)
+->only(['index']);
+
 Route::apiResource('departments',              DepartmentController::class);
 Route::apiResource('dtrs',                     DtrController::class);
 Route::apiResource('employees',                EmployeeController::class);

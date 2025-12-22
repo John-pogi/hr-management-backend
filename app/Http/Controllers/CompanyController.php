@@ -13,7 +13,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        return Company::paginate(20);
     }
 
     /**
@@ -21,7 +21,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -29,7 +29,9 @@ class CompanyController extends Controller
      */
     public function store(StoreCompanyRequest $request)
     {
-        //
+        $company = Company::create($request->validated());
+
+        return response()->json($company, 201);
     }
 
     /**
@@ -37,7 +39,7 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        //
+        return response()->json($company);
     }
 
     /**
@@ -53,7 +55,10 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
-        //
+        
+        $company->update($request->validated());
+
+        return response()->json($company);
     }
 
     /**
@@ -61,6 +66,8 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
-        //
+        $company->delete();
+
+        return response()->json(null, 204);
     }
 }
