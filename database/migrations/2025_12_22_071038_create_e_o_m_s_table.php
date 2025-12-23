@@ -20,6 +20,9 @@ return new class extends Migration
 
             $table->date('date');
 
+            $table->date('date_in')->nullable();
+            $table->date('date_out')->nullable();
+
             $table->time('time_in')->nullable();
             $table->time('time_out')->nullable();
 

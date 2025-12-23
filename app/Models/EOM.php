@@ -20,10 +20,14 @@ class EOM extends Model
         'total_hours',
         'shift_start',
         'shift_end',
+        'date_in',
+        'date_out',
     ];
 
     protected $casts = [
         'date'        => 'date',
+        'date_in'        => 'date',
+        'date_out'        => 'date',
         'time_in'     => 'datetime:H:i:s',
         'time_out'    => 'datetime:H:i:s',
         'shift_start' => 'datetime:H:i:s',
