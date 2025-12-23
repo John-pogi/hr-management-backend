@@ -5,15 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Leave;
 use App\Http\Requests\StoreLeaveRequest;
 use App\Http\Requests\UpdateLeaveRequest;
+use App\Http\Resources\LeaveResource;
+use Illuminate\Http\Request;
 
 class LeaveController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
+        $supervisor = $request->input('supervisor', 1);
+
+        $leaves = Leave::when($supervisor == 0, function($qb){
+           $qb->has('employee.ceoApproval');
+        })->paginate(20);
+
+        return LeaveResource::collection($leaves);
     }
 
     /**
@@ -21,7 +30,7 @@ class LeaveController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['message' => 'Create Leave form']);
     }
 
     /**
@@ -29,7 +38,8 @@ class LeaveController extends Controller
      */
     public function store(StoreLeaveRequest $request)
     {
-        //
+        $leave = Leave::create($request->validated());
+        return new LeaveResource($leave);
     }
 
     /**
@@ -37,7 +47,7 @@ class LeaveController extends Controller
      */
     public function show(Leave $leave)
     {
-        //
+        return new LeaveResource($leave);
     }
 
     /**
@@ -45,7 +55,7 @@ class LeaveController extends Controller
      */
     public function edit(Leave $leave)
     {
-        //
+        return new LeaveResource($leave);
     }
 
     /**
@@ -53,7 +63,8 @@ class LeaveController extends Controller
      */
     public function update(UpdateLeaveRequest $request, Leave $leave)
     {
-        //
+        $leave->update($request->validated());
+        return new LeaveResource($leave);
     }
 
     /**
@@ -61,6 +72,7 @@ class LeaveController extends Controller
      */
     public function destroy(Leave $leave)
     {
-        //
+        $leave->delete();
+        return response()->json(['message' => 'Leave deleted successfully']);
     }
 }

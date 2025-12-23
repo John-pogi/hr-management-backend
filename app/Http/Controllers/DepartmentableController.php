@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreDepartmentRequest;
-use App\Http\Requests\UpdateDepartmentRequest;
-use App\Models\Department;
-use Illuminate\Http\Request;
+use App\Models\Departmentable;
+use App\Http\Requests\StoreDepartmentableRequest;
+use App\Http\Requests\UpdateDepartmentableRequest;
 
-class DepartmentController extends Controller
+class DepartmentableController extends Controller
 {
- 
-   /**
+    /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        return Department::paginate(20);
+        //
     }
 
     /**
@@ -29,7 +27,7 @@ class DepartmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDepartmentRequest $request)
+    public function store(StoreDepartmentableRequest $request)
     {
         //
     }
@@ -37,7 +35,7 @@ class DepartmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Department $deparment)
+    public function show(Departmentable $departmentable)
     {
         //
     }
@@ -45,7 +43,7 @@ class DepartmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Department $deparment)
+    public function edit(Departmentable $departmentable)
     {
         //
     }
@@ -53,7 +51,7 @@ class DepartmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDepartmentRequest $request, Department $deparment)
+    public function update(UpdateDepartmentableRequest $request, Departmentable $departmentable)
     {
         //
     }
@@ -61,8 +59,8 @@ class DepartmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Department $deparment)
+    public function destroy(Departmentable $departmentable)
     {
         //
-    }   //
+    }
 }

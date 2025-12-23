@@ -21,8 +21,6 @@ class EmployeeFactory extends Factory
          return [
             'fullname'        => $this->faker->name(),
             'email'           => $this->faker->unique()->safeEmail(),
-            'department'      => $this->faker->randomElement(['IT', 'HR', 'Finance', 'Sales']),
-            'company'         => $this->faker->company(),
             'position'        => $this->faker->jobTitle(),
             'contact'         => $this->faker->phoneNumber(),
             'sss'             => $this->faker->numerify('##-#######-#'),

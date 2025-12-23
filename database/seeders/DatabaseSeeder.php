@@ -26,12 +26,14 @@ class DatabaseSeeder extends Seeder
             LeaveTypeSeeder::class,
             LeaveCodeSeeder::class,
             LeaveTypeSeeder::class,
+            LeaveSeeder::class,
             DTRSeeder::class,
             ShiftSeeder::class,
             HolidaySeeder::class,
             UploadSeeder::class,
             EOMSeeder::class,
-            IrregEmployeeScheduleSeeder::class
+            IrregEmployeeScheduleSeeder::class,
+            DepartmentableSeeder::class,
         ]);
         
     }

@@ -8,59 +8,29 @@ use App\Http\Requests\UpdateDTRRequest;
 
 class DTRController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function index()
     {
-        //
+        return DTR::paginate(20);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function store(StoreDTRRequest $request){
+        $dtr = DTR::create($request->validated());
+        return response()->json($dtr, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreDTRRequest $request)
-    {
-        //
+    public function show(DTR $dTR){
+        return response()->json($dTR);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(DTR $dTR)
-    {
-        //
+    public function update(UpdateDTRRequest $request, DTR $dTR){
+        $dTR->update($request->validated());
+        return response()->json($dTR);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(DTR $dTR)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateDTRRequest $request, DTR $dTR)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(DTR $dTR)
     {
-        //
+        $dTR->delete();
+        return response()->json(null, 204);
     }
 }

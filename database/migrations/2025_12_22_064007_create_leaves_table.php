@@ -26,19 +26,22 @@ return new class extends Migration
                     ->nullable()
                     ->constrained('leave_codes');
 
+            $table->decimal('valid_credit')->default(0);
+
             $table->date('start_date');
             $table->date('end_date');
 
             // Approval fields
-            $table->boolean('is_approved')->default(false);
+            $table->string('status')->default('pending');
+            $table->dateTime('modified_date')->nullable();
             
-            $table->foreignId('approved_by')
+            $table->foreignId('modified_by')
                   ->nullable()
                   ->constrained('employees');
 
-            $table->dateTime('approved_date')->nullable();
 
-            // Extra
+            $table->decimal('credit')->default(0.5);
+
             $table->text('notes')->nullable();
             $table->timestamps();
         });

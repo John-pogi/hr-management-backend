@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
-use App\Models\Role;
-use Illuminate\Http\Request;
+use App\Http\Resources\RoleResource;
 
 class RoleController extends Controller
 {
-        /**
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return RoleResource::collection(Role::paginate(20));
     }
 
     /**
@@ -22,7 +22,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['message' => 'Create Role form']);
     }
 
     /**
@@ -30,7 +30,8 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        //
+        $role = Role::create($request->validated());
+        return new RoleResource($role);
     }
 
     /**
@@ -38,7 +39,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
+        return new RoleResource($role);
     }
 
     /**
@@ -46,7 +47,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //
+        return new RoleResource($role);
     }
 
     /**
@@ -54,7 +55,8 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        //
+        $role->update($request->validated());
+        return new RoleResource($role);
     }
 
     /**
@@ -62,6 +64,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+        $role->delete();
+        return response()->json(['message' => 'Role deleted successfully']);
     }
 }

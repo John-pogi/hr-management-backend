@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\IrregEmployeeSchedule;
 use App\Http\Requests\StoreIrregEmployeeScheduleRequest;
 use App\Http\Requests\UpdateIrregEmployeeScheduleRequest;
+use App\Http\Resources\IrregEmployeeScheduleResource;
 
 class IrregEmployeeScheduleController extends Controller
 {
@@ -13,7 +14,7 @@ class IrregEmployeeScheduleController extends Controller
      */
     public function index()
     {
-        //
+        return IrregEmployeeScheduleResource::collection(IrregEmployeeSchedule::paginate(20));
     }
 
     /**
@@ -21,7 +22,7 @@ class IrregEmployeeScheduleController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['message' => 'Create Irregular Employee Schedule form']);
     }
 
     /**
@@ -29,7 +30,8 @@ class IrregEmployeeScheduleController extends Controller
      */
     public function store(StoreIrregEmployeeScheduleRequest $request)
     {
-        //
+        $irregEmployeeSchedule = IrregEmployeeSchedule::create($request->validated());
+        return new IrregEmployeeScheduleResource($irregEmployeeSchedule);
     }
 
     /**
@@ -37,7 +39,7 @@ class IrregEmployeeScheduleController extends Controller
      */
     public function show(IrregEmployeeSchedule $irregEmployeeSchedule)
     {
-        //
+        return new IrregEmployeeScheduleResource($irregEmployeeSchedule);
     }
 
     /**
@@ -45,7 +47,7 @@ class IrregEmployeeScheduleController extends Controller
      */
     public function edit(IrregEmployeeSchedule $irregEmployeeSchedule)
     {
-        //
+        return new IrregEmployeeScheduleResource($irregEmployeeSchedule);
     }
 
     /**
@@ -53,7 +55,8 @@ class IrregEmployeeScheduleController extends Controller
      */
     public function update(UpdateIrregEmployeeScheduleRequest $request, IrregEmployeeSchedule $irregEmployeeSchedule)
     {
-        //
+        $irregEmployeeSchedule->update($request->validated());
+        return new IrregEmployeeScheduleResource($irregEmployeeSchedule);
     }
 
     /**
@@ -61,6 +64,7 @@ class IrregEmployeeScheduleController extends Controller
      */
     public function destroy(IrregEmployeeSchedule $irregEmployeeSchedule)
     {
-        //
+        $irregEmployeeSchedule->delete();
+        return response()->json(['message' => 'Irregular Employee Schedule deleted successfully']);
     }
 }

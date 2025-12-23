@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Shift;
 use App\Http\Requests\StoreShiftRequest;
 use App\Http\Requests\UpdateShiftRequest;
+use App\Http\Resources\ShiftResource;
 
 class ShiftController extends Controller
 {
@@ -13,7 +14,7 @@ class ShiftController extends Controller
      */
     public function index()
     {
-        //
+        return ShiftResource::collection(Shift::paginate(20));
     }
 
     /**
@@ -21,7 +22,7 @@ class ShiftController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['message' => 'Create Shift form']);
     }
 
     /**
@@ -29,7 +30,8 @@ class ShiftController extends Controller
      */
     public function store(StoreShiftRequest $request)
     {
-        //
+        $shift = Shift::create($request->validated());
+        return new ShiftResource($shift);
     }
 
     /**
@@ -37,7 +39,7 @@ class ShiftController extends Controller
      */
     public function show(Shift $shift)
     {
-        //
+        return new ShiftResource($shift);
     }
 
     /**
@@ -45,7 +47,7 @@ class ShiftController extends Controller
      */
     public function edit(Shift $shift)
     {
-        //
+        return new ShiftResource($shift);
     }
 
     /**
@@ -53,7 +55,8 @@ class ShiftController extends Controller
      */
     public function update(UpdateShiftRequest $request, Shift $shift)
     {
-        //
+        $shift->update($request->validated());
+        return new ShiftResource($shift);
     }
 
     /**
@@ -61,6 +64,7 @@ class ShiftController extends Controller
      */
     public function destroy(Shift $shift)
     {
-        //
+        $shift->delete();
+        return response()->json(['message' => 'Shift deleted successfully']);
     }
 }

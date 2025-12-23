@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Supervisor;
 use App\Http\Requests\StoreSupervisorRequest;
 use App\Http\Requests\UpdateSupervisorRequest;
+use App\Http\Resources\SupervisorResource;
 
 class SupervisorController extends Controller
 {
@@ -13,7 +14,7 @@ class SupervisorController extends Controller
      */
     public function index()
     {
-        //
+        return SupervisorResource::collection(Supervisor::paginate(20));
     }
 
     /**
@@ -21,7 +22,7 @@ class SupervisorController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['message' => 'Create Supervisor form']);
     }
 
     /**
@@ -29,7 +30,8 @@ class SupervisorController extends Controller
      */
     public function store(StoreSupervisorRequest $request)
     {
-        //
+        $supervisor = Supervisor::create($request->validated());
+        return new SupervisorResource($supervisor);
     }
 
     /**
@@ -37,7 +39,7 @@ class SupervisorController extends Controller
      */
     public function show(Supervisor $supervisor)
     {
-        //
+        return new SupervisorResource($supervisor);
     }
 
     /**
@@ -45,7 +47,7 @@ class SupervisorController extends Controller
      */
     public function edit(Supervisor $supervisor)
     {
-        //
+        return new SupervisorResource($supervisor);
     }
 
     /**
@@ -53,7 +55,8 @@ class SupervisorController extends Controller
      */
     public function update(UpdateSupervisorRequest $request, Supervisor $supervisor)
     {
-        //
+        $supervisor->update($request->validated());
+        return new SupervisorResource($supervisor);
     }
 
     /**
@@ -61,6 +64,7 @@ class SupervisorController extends Controller
      */
     public function destroy(Supervisor $supervisor)
     {
-        //
+        $supervisor->delete();
+        return response()->json(['message' => 'Supervisor deleted successfully']);
     }
 }

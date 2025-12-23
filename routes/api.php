@@ -3,11 +3,19 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\CompanyEmployeeController;
-use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\Companies\CompanyController;
+use App\Http\Controllers\Companies\CompanyDeparment;
+use App\Http\Controllers\Companies\CompanyEmployeeController;
+use App\Http\Controllers\Department\DeparmentCompanyController;
+use App\Http\Controllers\Department\DepartmentController;
+
 use App\Http\Controllers\DtrController;
-use App\Http\Controllers\EmployeeController;
+
+use App\Http\Controllers\Employee\EmployeeController;
+use App\Http\Controllers\Employee\EmployeeDTRController;
+use App\Http\Controllers\Employee\EmployeeEOMController;
+use App\Http\Controllers\Employee\EmployeeLeaveApprovalsController;
+use App\Http\Controllers\Employee\EmployeeLeaveController;
 use App\Http\Controllers\EomController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\IrregEmployeeScheduleController;
@@ -22,11 +30,32 @@ use App\Http\Controllers\UserController;
 
 Route::apiResource('companies',                CompanyController::class);
 Route::apiResource('companies.employees', CompanyEmployeeController::class)
-->only(['index']);
-
+    ->only(['index']);
+Route::apiResource('companies.departments', CompanyDeparment::class)
+    ->only(['index']);
+    
 Route::apiResource('departments',              DepartmentController::class);
-Route::apiResource('dtrs',                     DtrController::class);
+Route::apiResource('departments.companies',   DeparmentCompanyController::class)
+    ->only(['index','post']);
+Route::patch('/departments/{deparment}/companies',   [DeparmentCompanyController::class, 'update']);
+
+Route::apiResource('dtr',                     DtrController::class);
+
 Route::apiResource('employees',                EmployeeController::class);
+
+Route::apiResource('employees.dtr', EmployeeDTRController::class)
+    ->only(['index']);
+
+Route::apiResource('employees.eom', EmployeeEOMController::class)
+    ->only(['index']);
+
+Route::apiResource('employees.leaves', EmployeeLeaveController::class)
+    ->only(['index']);
+
+Route::apiResource('employees.approvals', EmployeeLeaveApprovalsController::class)
+    ->only(['index']);
+
+    
 Route::apiResource('eoms',                     EomController::class);
 Route::apiResource('holidays',                 HolidayController::class);
 Route::apiResource('irreg-employee-schedules', IrregEmployeeScheduleController::class);
@@ -35,6 +64,7 @@ Route::apiResource('leave-codes',              LeaveCodeController::class);
 Route::apiResource('leave-types',              LeaveTypeController::class);
 Route::apiResource('roles',                    RoleController::class);
 Route::apiResource('shifts',                   ShiftController::class);
+
 Route::apiResource('supervisors',              SupervisorController::class);
 Route::apiResource('uploads',                  UploadController::class);
 Route::apiResource('users',                    UserController::class);

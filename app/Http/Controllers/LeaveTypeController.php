@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LeaveType;
 use App\Http\Requests\StoreLeaveTypeRequest;
 use App\Http\Requests\UpdateLeaveTypeRequest;
+use App\Http\Resources\LeaveTypeResource;
 
 class LeaveTypeController extends Controller
 {
@@ -13,7 +14,7 @@ class LeaveTypeController extends Controller
      */
     public function index()
     {
-        //
+        return LeaveTypeResource::collection(LeaveType::paginate(20));
     }
 
     /**
@@ -21,7 +22,7 @@ class LeaveTypeController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['message' => 'Create Leave Type form']);
     }
 
     /**
@@ -29,7 +30,8 @@ class LeaveTypeController extends Controller
      */
     public function store(StoreLeaveTypeRequest $request)
     {
-        //
+        $leaveType = LeaveType::create($request->validated());
+        return new LeaveTypeResource($leaveType);
     }
 
     /**
@@ -37,7 +39,7 @@ class LeaveTypeController extends Controller
      */
     public function show(LeaveType $leaveType)
     {
-        //
+        return new LeaveTypeResource($leaveType);
     }
 
     /**
@@ -45,7 +47,7 @@ class LeaveTypeController extends Controller
      */
     public function edit(LeaveType $leaveType)
     {
-        //
+        return new LeaveTypeResource($leaveType);
     }
 
     /**
@@ -53,7 +55,8 @@ class LeaveTypeController extends Controller
      */
     public function update(UpdateLeaveTypeRequest $request, LeaveType $leaveType)
     {
-        //
+        $leaveType->update($request->validated());
+        return new LeaveTypeResource($leaveType);
     }
 
     /**
@@ -61,6 +64,7 @@ class LeaveTypeController extends Controller
      */
     public function destroy(LeaveType $leaveType)
     {
-        //
+        $leaveType->delete();
+        return response()->json(['message' => 'Leave Type deleted successfully']);
     }
 }

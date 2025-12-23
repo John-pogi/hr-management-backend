@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Leave extends Model
 {
@@ -14,18 +15,22 @@ class Leave extends Model
         'employee_id',
         'start_date',
         'end_date',
-        'is_approved',
-        'approved_by',
         'leave_type_id',
-        'approved_date',
         'notes',
         'leave_code_id',
+        'valid_credit',
+        'modified_by',
+        'modified_date',
+        'status',
     ];
 
     protected $casts = [
-        'is_approved'   => 'boolean',
         'start_date'    => 'date',
         'end_date'      => 'date',
-        'approved_date' => 'datetime',
+        'modified_date' => 'datetime',
     ];
+
+    public function employee(): BelongsTo{
+        return $this->belongsTo(Employee::class);
+    }
 }

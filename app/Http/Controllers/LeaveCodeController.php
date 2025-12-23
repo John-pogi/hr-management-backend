@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LeaveCode;
 use App\Http\Requests\StoreLeaveCodeRequest;
 use App\Http\Requests\UpdateLeaveCodeRequest;
+use App\Http\Resources\LeaveCodeResource;
 
 class LeaveCodeController extends Controller
 {
@@ -13,7 +14,7 @@ class LeaveCodeController extends Controller
      */
     public function index()
     {
-        //
+        return LeaveCodeResource::collection(LeaveCode::paginate(20));
     }
 
     /**
@@ -21,7 +22,7 @@ class LeaveCodeController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['message' => 'Create Leave Code form']);
     }
 
     /**
@@ -29,7 +30,8 @@ class LeaveCodeController extends Controller
      */
     public function store(StoreLeaveCodeRequest $request)
     {
-        //
+        $leaveCode = LeaveCode::create($request->validated());
+        return new LeaveCodeResource($leaveCode);
     }
 
     /**
@@ -37,7 +39,7 @@ class LeaveCodeController extends Controller
      */
     public function show(LeaveCode $leaveCode)
     {
-        //
+        return new LeaveCodeResource($leaveCode);
     }
 
     /**
@@ -45,7 +47,7 @@ class LeaveCodeController extends Controller
      */
     public function edit(LeaveCode $leaveCode)
     {
-        //
+        return new LeaveCodeResource($leaveCode);
     }
 
     /**
@@ -53,7 +55,8 @@ class LeaveCodeController extends Controller
      */
     public function update(UpdateLeaveCodeRequest $request, LeaveCode $leaveCode)
     {
-        //
+        $leaveCode->update($request->validated());
+        return new LeaveCodeResource($leaveCode);
     }
 
     /**
@@ -61,6 +64,7 @@ class LeaveCodeController extends Controller
      */
     public function destroy(LeaveCode $leaveCode)
     {
-        //
+        $leaveCode->delete();
+        return response()->json(['message' => 'Leave Code deleted successfully']);
     }
 }

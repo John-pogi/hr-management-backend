@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Holiday;
 use App\Http\Requests\StoreHolidayRequest;
 use App\Http\Requests\UpdateHolidayRequest;
+use App\Http\Resources\HolidayResource;
 
 class HolidayController extends Controller
 {
@@ -13,7 +14,7 @@ class HolidayController extends Controller
      */
     public function index()
     {
-        //
+        return HolidayResource::collection(Holiday::paginate(20));
     }
 
     /**
@@ -21,7 +22,7 @@ class HolidayController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['message' => 'Create Holiday form']);
     }
 
     /**
@@ -29,7 +30,8 @@ class HolidayController extends Controller
      */
     public function store(StoreHolidayRequest $request)
     {
-        //
+        $holiday = Holiday::create($request->validated());
+        return new HolidayResource($holiday);
     }
 
     /**
@@ -37,7 +39,7 @@ class HolidayController extends Controller
      */
     public function show(Holiday $holiday)
     {
-        //
+        return new HolidayResource($holiday);
     }
 
     /**
@@ -45,7 +47,7 @@ class HolidayController extends Controller
      */
     public function edit(Holiday $holiday)
     {
-        //
+        return new HolidayResource($holiday);
     }
 
     /**
@@ -53,7 +55,8 @@ class HolidayController extends Controller
      */
     public function update(UpdateHolidayRequest $request, Holiday $holiday)
     {
-        //
+        $holiday->update($request->validated());
+        return new HolidayResource($holiday);
     }
 
     /**
@@ -61,6 +64,7 @@ class HolidayController extends Controller
      */
     public function destroy(Holiday $holiday)
     {
-        //
+        $holiday->delete();
+        return response()->json(['message' => 'Holiday deleted successfully']);
     }
 }

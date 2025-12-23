@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EOM;
 use App\Http\Requests\StoreEOMRequest;
 use App\Http\Requests\UpdateEOMRequest;
+use App\Http\Resources\EOMResource;
 
 class EOMController extends Controller
 {
@@ -13,7 +14,7 @@ class EOMController extends Controller
      */
     public function index()
     {
-        //
+        return EOMResource::collection(EOM::paginate(20));
     }
 
     /**
@@ -21,7 +22,7 @@ class EOMController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['message' => 'Create EOM form']);
     }
 
     /**
@@ -29,7 +30,8 @@ class EOMController extends Controller
      */
     public function store(StoreEOMRequest $request)
     {
-        //
+        $eom = EOM::create($request->validated());
+        return new EOMResource($eom);
     }
 
     /**
@@ -37,7 +39,7 @@ class EOMController extends Controller
      */
     public function show(EOM $eOM)
     {
-        //
+        return new EOMResource($eOM);
     }
 
     /**
@@ -45,7 +47,7 @@ class EOMController extends Controller
      */
     public function edit(EOM $eOM)
     {
-        //
+        return new EOMResource($eOM);
     }
 
     /**
@@ -53,7 +55,8 @@ class EOMController extends Controller
      */
     public function update(UpdateEOMRequest $request, EOM $eOM)
     {
-        //
+        $eOM->update($request->validated());
+        return new EOMResource($eOM);
     }
 
     /**
@@ -61,6 +64,7 @@ class EOMController extends Controller
      */
     public function destroy(EOM $eOM)
     {
-        //
+        $eOM->delete();
+        return response()->json(['message' => 'EOM record deleted successfully']);
     }
 }
