@@ -21,11 +21,10 @@ class IrregEmployeeScheduleFactory extends Factory
     {
          $date = $this->faker->dateTimeThisYear();
 
-
         return [
             'date'        => $date->format('Y-m-d'),
             'employee_id' => Employee::factory(),
-            'schedule'    => Schedule::factory()
+            'schedule_id'    => Schedule::factory()
         ];
     }
 }
