@@ -6,19 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class IrregEmployeeSchedule extends Model
+class ScheduleList extends Model
 {
-    /** @use HasFactory<\Database\Factories\IrregEmployeeScheduleFactory> */
+    /** @use HasFactory<\Database\Factories\ScheduleListFactory> */
     use HasFactory;
 
+      use HasFactory;
+
     protected $fillable = [
-        'employee_id',
         'schedule_id',
-        'date',
+        'shift_id',
+        'week_number',
     ];
 
     protected $casts = [
-        'date'        => 'date',
+        'week_number' => 'integer',
     ];
 
     public function schedule(): BelongsTo
@@ -26,8 +28,8 @@ class IrregEmployeeSchedule extends Model
         return $this->belongsTo(Schedule::class);
     }
 
-    public function employee(): BelongsTo
+    public function shift(): BelongsTo
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Shift::class);
     }
 }

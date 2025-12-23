@@ -11,21 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('irreg_employee_schedules', function (Blueprint $table) {
+        Schema::create('schedule_lists', function (Blueprint $table) {
             $table->id();
 
-               $table->date('date');
-
-            $table->foreignId('employee_id')
+            $table->foreignId('schedule_id')
                   ->nullable()
-                  ->constrained('employees'); 
+                  ->constrained('schedules'); 
 
             $table->foreignId('shift_id')
                   ->nullable()
                   ->constrained('shifts');
 
             $table->unsignedTinyInteger('week_number'); // 1–53
- 
+
             $table->timestamps();
         });
     }
@@ -35,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('irreg_employee_schedules');
+        Schema::dropIfExists('schedule_lists');
     }
 };

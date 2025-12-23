@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Employee;
+use App\Models\Schedule;
 use App\Models\Shift;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,14 +21,11 @@ class IrregEmployeeScheduleFactory extends Factory
     {
          $date = $this->faker->dateTimeThisYear();
 
-        // ISO week number (1–53)
-        $weekNumber = (int) $date->format('W');
 
         return [
             'date'        => $date->format('Y-m-d'),
             'employee_id' => Employee::factory(),
-            'shift_id'    => Shift::factory(),
-            'week_number' => $weekNumber,
+            'schedule'    => Schedule::factory()
         ];
     }
 }

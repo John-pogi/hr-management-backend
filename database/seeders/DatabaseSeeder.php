@@ -32,8 +32,10 @@ class DatabaseSeeder extends Seeder
             HolidaySeeder::class,
             UploadSeeder::class,
             EOMSeeder::class,
-            IrregEmployeeScheduleSeeder::class,
             DepartmentableSeeder::class,
+            ScheduleSeeder::class,
+            ScheduleListSeeder::class,
+            IrregEmployeeScheduleSeeder::class,
         ]);
         
     }
