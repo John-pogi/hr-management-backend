@@ -26,8 +26,14 @@ return new class extends Migration
             $table->time('time_in')->nullable();
             $table->time('time_out')->nullable();
 
-            // total hours worked that day
-            $table->decimal('total_hours', 5, 2)->default(0);
+            $table->integer('total_minutes')->default(0);
+            $table->integer('under_time_minutes')->default(0);
+            $table->integer('regular_minutes')->default(0);
+            $table->integer('late_minutes')->default(0);
+            $table->integer('overtime_minutes')->default(0);
+            $table->integer('leave_credit')->nullable();
+
+            $table->integer('approved_overtime')->default(0);
 
             $table->time('shift_start')->nullable();
             $table->time('shift_end')->nullable();

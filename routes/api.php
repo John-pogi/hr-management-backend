@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\GenerateEOM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,7 @@ use App\Http\Controllers\Employee\EmployeeDTRController;
 use App\Http\Controllers\Employee\EmployeeEOMController;
 use App\Http\Controllers\Employee\EmployeeLeaveApprovalsController;
 use App\Http\Controllers\Employee\EmployeeLeaveController;
+use App\Http\Controllers\Employee\EmployeeScheduleController;
 use App\Http\Controllers\EomController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\IrregEmployeeScheduleController;
@@ -23,10 +25,14 @@ use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LeaveCodeController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\ScheduleListController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
+use App\Models\EOM;
+use Carbon\Carbon;
 
 Route::apiResource('companies',                CompanyController::class);
 Route::apiResource('companies.employees', CompanyEmployeeController::class)
@@ -55,6 +61,9 @@ Route::apiResource('employees.leaves', EmployeeLeaveController::class)
 Route::apiResource('employees.approvals', EmployeeLeaveApprovalsController::class)
     ->only(['index']);
 
+Route::apiResource('employees.schedules', EmployeeScheduleController::class)
+    ->only(['index']);
+
     
 Route::apiResource('eoms',                     EomController::class);
 Route::apiResource('holidays',                 HolidayController::class);
@@ -68,6 +77,17 @@ Route::apiResource('shifts',                   ShiftController::class);
 Route::apiResource('supervisors',              SupervisorController::class);
 Route::apiResource('uploads',                  UploadController::class);
 Route::apiResource('users',                    UserController::class);
+
+Route::apiResource('schedules',                  ScheduleController::class);
+Route::apiResource('schedule-lists',                  ScheduleListController::class);
+
+Route::get('/', function(){
+    
+    $eom = new GenerateEOM();
+    $eom->run(1,Carbon::now()->toDate());
+
+    return EOM::where('employee_id', 1)->get();
+});
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();

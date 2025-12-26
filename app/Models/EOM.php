@@ -12,12 +12,19 @@ class EOM extends Model
 
     protected $table = 'eom';
 
+
     protected $fillable = [
         'employee_id',
         'date',
         'time_in',
         'time_out',
-        'total_hours',
+        'total_minutes',
+        'under_time_minutes',
+        'regular_minutes',
+        'late_minutes',
+        'approved_overtime',
+        'overtime_minutes',
+        'leave_credit',
         'shift_start',
         'shift_end',
         'date_in',
@@ -32,6 +39,5 @@ class EOM extends Model
         'time_out'    => 'datetime:H:i:s',
         'shift_start' => 'datetime:H:i:s',
         'shift_end'   => 'datetime:H:i:s',
-        'total_hours' => 'decimal:2',
     ];
 }

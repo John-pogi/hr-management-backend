@@ -19,8 +19,6 @@ class Shift extends Model
     ];
 
     protected $casts = [
-        'start_time'  => 'datetime:H:i:s',
-        'end_time'    => 'datetime:H:i:s',
         'day_of_week' => 'array',
         'flag'        => 'boolean',
     ];

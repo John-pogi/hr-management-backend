@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,8 +20,16 @@ class DTR extends Model
         'type',
     ]; 
 
-    protected $casts = [
-        'date' => 'date',
-        'time' => 'datetime:H:i:s',
-    ];
+    public function getToDateAttribute()
+    {
+        if (!$this->date || !$this->time) {
+            return null;
+        }
+        
+        return \Carbon\Carbon::parse($this->date)
+            ->setTimeFromTimeString($this->time)
+            ->format('Y-m-d H:i:s');
+    }
+    
+ 
 }

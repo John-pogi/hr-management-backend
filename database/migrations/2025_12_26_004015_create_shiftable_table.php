@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedule_lists', function (Blueprint $table) {
+        Schema::create('shiftables', function (Blueprint $table) {
+           
             $table->id();
 
-            $table->foreignId('schedule_id')
+            $table->foreignId('shift_id')
                   ->nullable()
-                  ->constrained('schedules'); 
+                  ->constrained('shifts'); 
 
-            $table->unsignedTinyInteger('week_number'); // 1–53
+            $table->foreignId('schedule_list_id')
+                  ->nullable()
+                  ->constrained('schedule_lists');
 
             $table->timestamps();
         });
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schedule_lists');
+        Schema::dropIfExists('shiftables');
     }
 };

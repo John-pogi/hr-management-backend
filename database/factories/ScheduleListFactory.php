@@ -25,7 +25,6 @@ class ScheduleListFactory extends Factory
 
         return [
             'schedule_id' => Schedule::factory(),
-            'shift_id' => Shift::factory(),
             'week_number' => $weekNumber          
         ];
     }

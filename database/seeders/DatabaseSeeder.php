@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             ScheduleSeeder::class,
             ScheduleListSeeder::class,
             IrregEmployeeScheduleSeeder::class,
+            ShiftablesSeeder::class
         ]);
         
     }
