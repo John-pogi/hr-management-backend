@@ -12,8 +12,6 @@ class Upload extends Model
 
      protected $fillable = [
         'filename',
-        'owner_id',
-        'owner_table',
     ];
     
 }

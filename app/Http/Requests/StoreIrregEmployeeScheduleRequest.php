@@ -11,7 +11,7 @@ class StoreIrregEmployeeScheduleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,26 @@ class StoreIrregEmployeeScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'schedule_id' => 'required|exists:schedules,id',
+            'employees' => 'required|array|min:1',
+            'employees.*' => 'required|exists:employees,id',
+            'date' => 'required|date_format:Y-m'
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'schedule_id.required' => 'Schedule selection is required.',
+            'schedule_id.exists' => 'Selected schedule does not exist.',
+            'employees.required' => 'At least one employee must be selected.',
+            'employees.array' => 'Employees must be an array.',
+            'employees.min' => 'Select at least one employee.',
+            'employees.*.required' => 'Each employee ID is required.',
+            'employees.*.exists' => 'One or more selected employees do not exist.',
+            'date.required' => 'Date (YYYY-MM) is required.',
+            'date.date_format' => 'Date must be in YYYY-MM format (e.g., 2026-01).',
+        ];
+    }
+
 }

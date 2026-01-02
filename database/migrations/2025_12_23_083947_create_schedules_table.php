@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->boolean('default')->default(false);
             $table->timestamps();
         });
     }

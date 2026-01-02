@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Shift extends Model
 {
@@ -22,7 +23,6 @@ class Shift extends Model
     ];
 
     protected $casts = [
-        'day_of_week' => 'array',
         'flag'        => 'boolean',
     ];
 
@@ -46,5 +46,13 @@ class Shift extends Model
         }
 
         return $schedules;
+    }
+
+    protected function dayOfWeek(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => explode(',',$value), 
+            set: fn (string $value) => $value, 
+        );
     }
 }

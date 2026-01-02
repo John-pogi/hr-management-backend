@@ -13,6 +13,11 @@ class Schedule extends Model
 
     protected $fillable = [
         'title',
+        'default'
+    ];
+
+    protected $casts = [
+        'default'        => 'boolean',
     ];
 
     public function list(): HasMany{

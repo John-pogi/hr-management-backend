@@ -36,15 +36,19 @@ use App\Models\EOM;
 use App\Models\User;
 use Carbon\Carbon;
 
+// Companies
 Route::apiResource('companies',                CompanyController::class);
+
 Route::apiResource('companies.employees', CompanyEmployeeController::class)
     ->only(['index']);
 Route::apiResource('companies.departments', CompanyDeparment::class)
     ->only(['index']);
     
+// Departments
 Route::apiResource('departments',              DepartmentController::class);
 Route::apiResource('departments.companies',   DeparmentCompanyController::class)
     ->only(['index','post']);
+
 Route::patch('/departments/{deparment}/companies',   [DeparmentCompanyController::class, 'update']);
 
 Route::apiResource('dtr',                     DtrController::class);
@@ -68,7 +72,7 @@ Route::apiResource('employees.schedules', EmployeeScheduleController::class)
 
 Route::apiResource('eoms',                     EomController::class);
 
-Route::apiResource('holidays',                 HolidayController::class)->middleware('auth:sanctum');
+Route::apiResource('holidays',                 HolidayController::class);
 Route::apiResource('irreg-employee-schedules', IrregEmployeeScheduleController::class);
 Route::apiResource('leaves',                   LeaveController::class);
 Route::apiResource('leave-codes',              LeaveCodeController::class);
@@ -77,13 +81,13 @@ Route::apiResource('roles',                    RoleController::class);
 Route::apiResource('shifts',                   ShiftController::class);
 
 Route::apiResource('supervisors',              SupervisorController::class);
-Route::apiResource('uploads',                  UploadController::class);
+Route::apiResource('uploads',                  UploadController::class)->only(['store']);
 Route::apiResource('users',                    UserController::class);
 
 Route::apiResource('schedules',                  ScheduleController::class);
 Route::apiResource('schedules.calendar', ScheduleCalendarController::class)
     ->only(['index']);
-
+    
 Route::apiResource('schedule-lists',                  ScheduleListController::class);
 
 Route::get('/', function(){

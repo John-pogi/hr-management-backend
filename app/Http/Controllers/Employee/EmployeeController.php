@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EmployeeResource;
 
 class EmployeeController extends Controller
 {
@@ -18,13 +19,13 @@ class EmployeeController extends Controller
 
         $company_id = $request->company_id;
 
-        $employees = Employee::with(['company'])
+        $employees = Employee::with(['company','deparment'])
         ->when($company_id, function($qb)use($company_id){
             $qb->where('company_id', $company_id);
         } )
         ->paginate($request->per_page);
-        
-        return response()->json($employees);
+
+        return EmployeeResource::collection($employees);
     }
 
     /**

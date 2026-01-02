@@ -11,7 +11,7 @@ class StoreCompanyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,23 @@ class StoreCompanyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'companies' => 'required|array|min:1',
+            'companies.name.*' => 'required|string|max:255',
+            'companies.code.*' => 'required|string|max:255',
+            'companies.logo.*' => 'nullable|string|max:255',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $companies = $this->input('companies');
+
+        foreach ($companies as $index => &$company) {
+            if (!isset($company['logo'])) {
+                $company['logo'] = null;
+            }
+        }
+        
+        $this->merge(['companies' => $companies]);
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->time('start_time');
             $table->time('end_time');
-            $table->json('day_of_week');
+            $table->string('day_of_week');
             $table->boolean('flag')->default(false);
             $table->timestamps();
         });

@@ -6,6 +6,7 @@ use App\Models\IrregEmployeeSchedule;
 use App\Http\Requests\StoreIrregEmployeeScheduleRequest;
 use App\Http\Requests\UpdateIrregEmployeeScheduleRequest;
 use App\Http\Resources\IrregEmployeeScheduleResource;
+use Exception;
 use Illuminate\Http\Request;
 
 class IrregEmployeeScheduleController extends Controller
@@ -31,8 +32,13 @@ class IrregEmployeeScheduleController extends Controller
      */
     public function store(StoreIrregEmployeeScheduleRequest $request)
     {
-        $irregEmployeeSchedule = IrregEmployeeSchedule::create($request->validated());
-        return new IrregEmployeeScheduleResource($irregEmployeeSchedule);
+        try{
+            $irregEmployeeSchedule = IrregEmployeeSchedule::create($request->validated());
+            return new IrregEmployeeScheduleResource($irregEmployeeSchedule);
+        }catch(Exception $err){
+            return response()->json(['message' => 'Something went'], 500);
+        }
+     
     }
 
     /**

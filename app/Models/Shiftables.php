@@ -14,5 +14,5 @@ class Shiftables extends Model
         'shift_id',
         'schedule_list_id',
     ];
-  
+    
 }

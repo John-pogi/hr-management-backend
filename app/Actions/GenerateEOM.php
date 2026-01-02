@@ -5,10 +5,11 @@ namespace App\Actions;
 use App\Models\DTR;
 use App\Models\EOM;
 use App\Models\IrregEmployeeSchedule;
+use App\Models\Schedule;
 use App\Models\ScheduleList;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use Illuminate\Support\Facades\DB;
+use Exception;
 
 class GenerateEOM
 {
@@ -22,25 +23,33 @@ class GenerateEOM
             ->whereRaw('EXTRACT(YEAR FROM date) = ?', [$carbonDate->year])
             ->first();
 
-        $hasIregguralSchedule = isset($irregSchedule);
+        $scheduleID =  isset($irregSchedule) 
+            ?  $irregSchedule->schedule->id 
+            :  Schedule::where('default', true)->pluck('id')->first();
+    
+        if(!isset($scheduleID)){
+            throw new Exception('No schedule found');
+        }
 
-        $hasIregguralSchedule 
-            ? $this->irregularSchedule($employeeID, $irregSchedule, $date)
-            : $this->regularSchedule($employeeID,$date);
+        $this->irregularSchedule($employeeID, $scheduleID, $date);
     }
 
-    private function irregularSchedule($employeeID, $irregSchedule, $date){
+    private function irregularSchedule($employeeID, $scheduleID, $date){
 
         $currentDate = new Carbon($date);
         $currentWeekNumber = $currentDate->weekOfMonth();
         $dayName = $currentDate->toDate()->format('D');
 
-        $schedule = ScheduleList::with(['shifts'])
+        $scheduleList = ScheduleList::with(['shifts'])
             ->where('week_number',$currentWeekNumber)
-            ->where('schedule_id', $irregSchedule->id)
+            ->where('schedule_id', $scheduleID)
             ->first();
 
-        $shift = $schedule->getCurrentShift($dayName);
+        if(!isset($scheduleList)){
+            throw new Exception('No Schedule List');
+        }
+        
+        $shift = $scheduleList->getCurrentShift($dayName);
 
         if(isset($shift)){
 

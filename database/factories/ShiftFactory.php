@@ -29,7 +29,7 @@ class ShiftFactory extends Factory
             'title'       => $this->faker->randomElement(['Morning Shift', 'Afternoon Shift', 'Night Shift']),
             'start_time'  => $startDateTime->format('H:i:s'),
             'end_time'    => $endDateTime->format('H:i:s'),
-            'day_of_week' => $days,      // cast to array on model; stored as JSON
+            'day_of_week' => implode(',', $days),      // cast to array on model; stored as JSON
             'flag'        => $this->faker->boolean(90), // mostly active
         ];
     }

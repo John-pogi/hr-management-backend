@@ -31,9 +31,12 @@ class CompanyController extends Controller
      */
     public function store(StoreCompanyRequest $request)
     {
-        $company = Company::create($request->validated());
 
-        return response()->json($company, 201);
+        $companies = $request->validated('companies');
+
+        Company::insert($companies);
+
+        return response()->json(['message' => 'companies created'], 201);
     }
 
     /**

@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('uploads', function (Blueprint $table) {
             $table->id();
             $table->string('filename');
-            $table->string('owner_id');
-            $table->string('owner_table');   
             $table->timestamps();
         });
     }

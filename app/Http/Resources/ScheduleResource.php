@@ -17,10 +17,14 @@ class ScheduleResource extends JsonResource
          return [
             'id' => $this->id,
             'title' => $this->title,
-            'supervisor' => $this->whenLoaded('supervisor'),
-            'list' => $this->whenLoaded('list'),
-            'created_at' => $this->created_at->toISOString(),
-            'updated_at' => $this->updated_at->toISOString(),
+            'shift' => $this->whenLoaded('list')->sortBy('week_number')->map(function($list){
+                return [
+                    'week' => $list->week_number,
+                    'start' => $list->shifts->first()?->start_time,
+                    'end' => $list->shifts->first()?->end_time,
+                    'day_of_week' => $list->shifts->first()?->day_of_week,
+                ];
+            })->toArray()
         ];
     }
 }
