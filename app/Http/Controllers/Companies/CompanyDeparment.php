@@ -11,7 +11,7 @@ class CompanyDeparment extends Controller
 {
     
     public function index(Request $request, Company $company){
-        return $company->deparments()->paginate(20);
+        return $company->deparments()->paginate($request->per_page);
     }
 
 }

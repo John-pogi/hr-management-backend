@@ -17,6 +17,6 @@ class EmployeeEOMController extends Controller
                 $qb->where('date',$date);
         })
             ->where('employee_id',$employee->id)
-            ->paginate(20);
+             ->paginate($request->per_page);
     }
 }

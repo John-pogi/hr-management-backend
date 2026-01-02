@@ -28,6 +28,6 @@ class EmployeeLeaveApprovalsController extends Controller
             ->when($type, function($qb)use($type){
                 $qb->where('leave_type_id',$type);
             })
-            ->paginate(20);
+             ->paginate($request->per_page);
     }
 }

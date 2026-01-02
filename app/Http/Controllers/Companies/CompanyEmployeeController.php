@@ -17,7 +17,7 @@ class CompanyEmployeeController extends Controller
             $qb->where('department_id',$request->input('department'));
         })
         ->where('company_id', $company->id)
-        ->paginate(20);
+        ->paginate($request->per_page);
     }
 
 }

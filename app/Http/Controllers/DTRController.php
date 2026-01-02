@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\DTR;
 use App\Http\Requests\StoreDTRRequest;
 use App\Http\Requests\UpdateDTRRequest;
+use Illuminate\Http\Request;
 
 class DTRController extends Controller
 {
    
-    public function index()
+    public function index(Request $request)
     {
-        return DTR::paginate(20);
+        return DTR::paginate($request->per_page);
     }
 
     public function store(StoreDTRRequest $request){

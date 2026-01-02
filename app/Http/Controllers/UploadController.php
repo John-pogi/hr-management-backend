@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Upload;
 use App\Http\Requests\StoreUploadRequest;
 use App\Http\Requests\UpdateUploadRequest;
+use Illuminate\Http\Request;
 
 class UploadController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
     }

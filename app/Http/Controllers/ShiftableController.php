@@ -6,13 +6,14 @@ use App\Models\ScheduleListable;
 use App\Http\Requests\StoreScheduleListableRequest;
 use App\Http\Requests\UpdateScheduleListableRequest;
 use App\Models\Shiftables;
+use Illuminate\Http\Request;
 
 class ShiftableController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
     }

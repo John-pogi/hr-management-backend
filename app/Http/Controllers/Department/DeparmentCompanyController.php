@@ -13,7 +13,7 @@ class DeparmentCompanyController extends Controller
 {
 
     public function index(Request $request, Department $department){
-        return $department->companies()->paginate(20);
+        return $department->companies()->paginate($request->per_page);
     }
 
     public function store(StoreDepartmentableRequest $request, Department $department)

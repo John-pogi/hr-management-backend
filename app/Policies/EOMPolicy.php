@@ -5,7 +5,9 @@ namespace App\Policies;
 use App\Models\EOM;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 
+#[UsePolicy(EOM::class)]
 class EOMPolicy
 {
     /**
@@ -21,7 +23,8 @@ class EOMPolicy
      */
     public function view(User $user, EOM $eOM): bool
     {
-        return false;
+        return $user->id === 2;
+        // return $eOM->id === 1;
     }
 
     /**

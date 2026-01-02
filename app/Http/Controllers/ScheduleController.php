@@ -6,17 +6,24 @@ use App\Models\Schedule;
 use App\Http\Requests\StoreScheduleRequest;
 use App\Http\Requests\UpdateScheduleRequest;
 use App\Http\Resources\ScheduleResource;
+use App\Models\ScheduleList;
+use App\Models\Shift;
+use App\Models\Shiftables;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index(Request $request){
         
-        $schedules = Schedule::paginate(20);
-        
+        $schedules = Schedule::with(['list'])
+            ->paginate($request->per_page);
+
         return ScheduleResource::collection($schedules);
     }
     /**
@@ -33,9 +40,33 @@ class ScheduleController extends Controller
      */
     public function store(StoreScheduleRequest $request): JsonResponse
     {
-        $schedule = Schedule::create($request->validated());
-        $schedule->load('supervisor');
-        
+        $inputs = $request->validated();
+
+        $schedule = Schedule::create(['title' => $inputs['title']]);
+
+        $shifts = $inputs['shift'];
+
+        foreach($shifts as $shift){
+
+            $scheduleList = ScheduleList::create([
+                'schedule_id' => $schedule->id,
+                'week_number' => $shift['week']
+            ]);
+
+            $shift = Shift::create([
+                'title' => '',
+                'start_time' => $shift['start'],
+                'end_time' => $shift['end'],
+                'day_of_week' => $shift['day_of_week'],
+                'flag' => false,
+            ]);
+
+            Shiftables::create([
+                 'shift_id' => $shift->id,
+                'schedule_list_id' => $scheduleList->id,
+            ]);
+        }
+
         return response()->json($schedule, 201);
     }
 
@@ -44,8 +75,6 @@ class ScheduleController extends Controller
      */
     public function show(Schedule $schedule): JsonResponse
     {
-        $schedule->load('supervisor');
-        
         return response()->json($schedule);
     }
 
@@ -64,7 +93,6 @@ class ScheduleController extends Controller
     public function update(UpdateScheduleRequest $request, Schedule $schedule): JsonResponse
     {
         $schedule->update($request->validated());
-        $schedule->load('supervisor');
         
         return response()->json($schedule);
     }

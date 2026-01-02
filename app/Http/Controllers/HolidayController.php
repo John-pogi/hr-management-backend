@@ -6,15 +6,17 @@ use App\Models\Holiday;
 use App\Http\Requests\StoreHolidayRequest;
 use App\Http\Requests\UpdateHolidayRequest;
 use App\Http\Resources\HolidayResource;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 
 class HolidayController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return HolidayResource::collection(Holiday::paginate(20));
+        return HolidayResource::collection(Holiday::paginate($request->per_page));
     }
 
     /**
@@ -39,6 +41,9 @@ class HolidayController extends Controller
      */
     public function show(Holiday $holiday)
     {
+
+        dd(Gate::inspect('view', $holiday));
+
         return new HolidayResource($holiday);
     }
 

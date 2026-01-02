@@ -12,7 +12,7 @@ class DepartmentController extends Controller
 {
  
     public function index(Request $request){
-        return Department::paginate(20);
+        return Department::paginate($request->per_page);
     }
 
     public function store(StoreDepartmentRequest $request){

@@ -25,6 +25,7 @@ use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LeaveCodeController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Schedule\ScheduleCalendarController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ScheduleListController;
 use App\Http\Controllers\ShiftController;
@@ -32,6 +33,7 @@ use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use App\Models\EOM;
+use App\Models\User;
 use Carbon\Carbon;
 
 Route::apiResource('companies',                CompanyController::class);
@@ -62,11 +64,11 @@ Route::apiResource('employees.approvals', EmployeeLeaveApprovalsController::clas
     ->only(['index']);
 
 Route::apiResource('employees.schedules', EmployeeScheduleController::class)
-    ->only(['index']);
+    ->only(['index']);  
 
-    
 Route::apiResource('eoms',                     EomController::class);
-Route::apiResource('holidays',                 HolidayController::class);
+
+Route::apiResource('holidays',                 HolidayController::class)->middleware('auth:sanctum');
 Route::apiResource('irreg-employee-schedules', IrregEmployeeScheduleController::class);
 Route::apiResource('leaves',                   LeaveController::class);
 Route::apiResource('leave-codes',              LeaveCodeController::class);
@@ -79,6 +81,9 @@ Route::apiResource('uploads',                  UploadController::class);
 Route::apiResource('users',                    UserController::class);
 
 Route::apiResource('schedules',                  ScheduleController::class);
+Route::apiResource('schedules.calendar', ScheduleCalendarController::class)
+    ->only(['index']);
+
 Route::apiResource('schedule-lists',                  ScheduleListController::class);
 
 Route::get('/', function(){
@@ -88,6 +93,20 @@ Route::get('/', function(){
 
     return EOM::where('employee_id', 1)->get();
 });
+
+
+Route::get('/login', function (Request $request) {
+    $user = User::find(1);
+    return $user->createToken('hello')->plainTextToken;
+});
+
+Route::get('/logout', function (Request $request) {
+
+    $request->user('sanctum')->currentAccessToken()->delete();
+    return response(null, 204);
+
+})->middleware('auth:sanctum');
+
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();

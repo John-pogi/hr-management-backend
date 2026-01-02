@@ -18,4 +18,9 @@ class Schedule extends Model
     public function list(): HasMany{
         return $this->hasMany(ScheduleList::class);
     }
+
+    public function getWeekList($weekNumber){
+        return $this->list->Where('week_number', $weekNumber);
+    }
+
 }

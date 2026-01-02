@@ -6,15 +6,16 @@ use App\Models\LeaveType;
 use App\Http\Requests\StoreLeaveTypeRequest;
 use App\Http\Requests\UpdateLeaveTypeRequest;
 use App\Http\Resources\LeaveTypeResource;
+use Illuminate\Http\Request;
 
 class LeaveTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return LeaveTypeResource::collection(LeaveType::paginate(20));
+        return LeaveTypeResource::collection(LeaveType::paginate($request->per_page));
     }
 
     /**

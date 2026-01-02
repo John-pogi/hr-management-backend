@@ -22,7 +22,7 @@ class EmployeeDTRController extends Controller
                     $qb->where('type',$type);
             })
             ->where('employee_id',$employee->id)
-            ->paginate(20);
+            ->paginate($request->per_page);
     }
 
 }

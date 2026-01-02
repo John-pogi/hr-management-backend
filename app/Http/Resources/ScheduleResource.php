@@ -18,6 +18,7 @@ class ScheduleResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'supervisor' => $this->whenLoaded('supervisor'),
+            'list' => $this->whenLoaded('list'),
             'created_at' => $this->created_at->toISOString(),
             'updated_at' => $this->updated_at->toISOString(),
         ];

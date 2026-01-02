@@ -6,15 +6,16 @@ use App\Models\Supervisor;
 use App\Http\Requests\StoreSupervisorRequest;
 use App\Http\Requests\UpdateSupervisorRequest;
 use App\Http\Resources\SupervisorResource;
+use Illuminate\Http\Request;
 
 class SupervisorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return SupervisorResource::collection(Supervisor::paginate(20));
+        return SupervisorResource::collection(Supervisor::paginate($request->per_page));
     }
 
     /**

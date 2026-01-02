@@ -6,15 +6,19 @@ use App\Models\EOM;
 use App\Http\Requests\StoreEOMRequest;
 use App\Http\Requests\UpdateEOMRequest;
 use App\Http\Resources\EOMResource;
+use App\Models\Company;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 
 class EOMController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return EOMResource::collection(EOM::paginate(20));
+        return EOMResource::collection(EOM::paginate($request->per_page));
     }
 
     /**
@@ -39,6 +43,15 @@ class EOMController extends Controller
      */
     public function show(EOM $eOM)
     {
+
+        $response = Gate::inspect('view',$eOM);
+
+        dd( $response);
+
+        if(!$response->allowed()){
+            return 'Oh no!';
+        }
+
         return new EOMResource($eOM);
     }
 

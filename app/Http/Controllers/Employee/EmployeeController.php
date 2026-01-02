@@ -13,9 +13,17 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $employees = Employee::paginate(20);
+
+        $company_id = $request->company_id;
+
+        $employees = Employee::with(['company'])
+        ->when($company_id, function($qb)use($company_id){
+            $qb->where('company_id', $company_id);
+        } )
+        ->paginate($request->per_page);
+        
         return response()->json($employees);
     }
 

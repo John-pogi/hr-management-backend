@@ -8,13 +8,14 @@ use App\Http\Requests\UpdateScheduleListRequest;
 use App\Http\Resources\ScheduleListResource;
 use App\Http\Resources\ScheduleListCollection;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ScheduleListController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): ScheduleListCollection
+    public function index(Request $request): ScheduleListCollection
     {
         $scheduleLists = ScheduleList::with(['schedule', 'shifts'])->paginate(20);
         

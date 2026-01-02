@@ -154,10 +154,7 @@ class GenerateEOM
                 ->diffInMinutes($this->toDate($timeOUT))
             : 0;
 
-        $regularMinutes = isset($timeIN, $timeOUT)
-            ? $this->minTime($timeIN, $shiftStart)
-                ->diffInMinutes($this->maxTime($timeOUT, $shiftEnd), true)
-            : 0;
+        $regularMinutes =  isset($timeIN, $timeOUT) ?  $this->computeRegular($timeIN->toDate,$timeOUT->toDate,$shiftStart, $shiftEnd) : 0;
 
         foreach ($unpaidBreaks as $unpaidBreak) {
             if(isset($timeIN, $timeOUT)){
@@ -180,20 +177,9 @@ class GenerateEOM
             }
         }
 
-        $late = isset($timeIN, $timeOUT)
-            ? $this->minTime($timeIN, $shiftStart)
-                ->diffInMinutes( $this->toDate($timeIN)->setTimeFrom($shiftStart), true)
-            : 0;
-
-        $underTime = isset($timeIN, $timeOUT)
-            ? $this->maxTime($timeOUT, $shiftEnd)
-                ->diffInMinutes($this->toDate($timeOUT)->setTimeFrom($shiftEnd), true)
-            : 0;
-
-        $overTime = isset($timeIN, $timeOUT)
-            ? max($this->maxTime($timeOUT, $shiftEnd)
-                ->diffInMinutes($this->toDate($timeOUT)), 0)
-            : 0;
+        $late = isset($timeIN, $timeOUT) ?  $this->computeLate($timeIN->toDate,$shiftStart) : 0;
+        $underTime = isset($timeIN, $timeOUT) ?  $this->computeUndertime($timeOUT->toDate,$shiftStart, $shiftEnd) : 0;
+        $overTime = isset($timeIN, $timeOUT) ?  $this->computeOvertime($timeOUT->toDate,$shiftStart, $shiftEnd) : 0;
 
         EOM::updateOrCreate(
             ['employee_id' => $employeeID, 'date' => $dateIN],
@@ -241,6 +227,69 @@ class GenerateEOM
 
     private function toDate($shift){
         return new Carbon($shift->date)->setTimeFrom($shift->time);
+    }
+
+    private function computeOvertime($timeOUT, $shiftStart, $shiftEND){
+        
+        $carbonTimeOUT = new Carbon($timeOUT);
+        $carbonShiftEnd = new Carbon($shiftEND);
+        $carbonShiftStart = new Carbon($shiftStart);
+
+        if($carbonShiftStart->gte($carbonShiftEnd) && $carbonShiftStart->isSameDay($carbonShiftEnd)){
+            $carbonShiftEnd->addDay();
+        }
+
+        $overTime = $carbonShiftEnd->diffInMinutes($carbonTimeOUT);
+        
+        return $overTime > 0 ? $overTime : 0;
+    }
+
+    private function computeLate($timeIN, $shiftStart){
+        
+        $carbonTimeIN = new Carbon($timeIN);
+        $carbonShiftStart =   $carbonTimeIN->copy()->setTimeFrom($shiftStart);
+
+        $late = $carbonShiftStart->diffInMinutes($carbonTimeIN);
+       
+        return $late > 0 ? $late : 0;
+    }
+
+    private function computeUndertime($timeOUT, $shiftStart, $shiftEND){
+        
+        $carbonTimeOUT = new Carbon($timeOUT);
+        $carbonShiftEnd = new Carbon($shiftEND);
+        $carbonShiftStart = new Carbon($shiftStart);
+
+        if($carbonShiftStart->gte($carbonShiftEnd) && $carbonShiftStart->isSameDay($carbonShiftEnd)){
+            $carbonShiftEnd->addDay();
+        }
+
+        $overTime = $carbonTimeOUT->diffInMinutes($carbonShiftEnd);
+        
+        return $overTime > 0 ? $overTime : 0;
+    }
+
+    private function computeRegular($timeIN, $timeOUT, $shiftStart, $shiftEND){
+        
+        $carbonTimeIn = new Carbon($timeIN);
+        $carbonTimeOUT = new Carbon($timeOUT);
+
+        $carbonShiftEnd = new Carbon($shiftEND);
+        $carbonShiftStart = new Carbon($shiftStart);
+
+        if($carbonShiftStart->gte($carbonShiftEnd) && $carbonShiftStart->isSameDay($carbonShiftEnd)){
+            $carbonShiftEnd->addDay();
+        }
+
+        if($carbonTimeIn->lt($carbonShiftStart)){
+            $carbonTimeIn = $carbonShiftStart->copy();
+        }
+
+        if($carbonTimeOUT->gt($carbonShiftEnd)){
+            $carbonTimeOUT = $carbonShiftEnd->copy();
+        }
+
+        return $carbonTimeIn->diffInMinutes($carbonTimeOUT, true);
     }
 
 }

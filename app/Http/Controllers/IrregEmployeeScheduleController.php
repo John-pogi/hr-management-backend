@@ -6,15 +6,16 @@ use App\Models\IrregEmployeeSchedule;
 use App\Http\Requests\StoreIrregEmployeeScheduleRequest;
 use App\Http\Requests\UpdateIrregEmployeeScheduleRequest;
 use App\Http\Resources\IrregEmployeeScheduleResource;
+use Illuminate\Http\Request;
 
 class IrregEmployeeScheduleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return IrregEmployeeScheduleResource::collection(IrregEmployeeSchedule::paginate(20));
+        return IrregEmployeeScheduleResource::collection(IrregEmployeeSchedule::paginate($request->per_page));
     }
 
     /**

@@ -6,15 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
+use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Company::paginate(20);
+        return Company::paginate($request->per_page);
     }
 
     /**

@@ -6,15 +6,16 @@ use App\Models\LeaveCode;
 use App\Http\Requests\StoreLeaveCodeRequest;
 use App\Http\Requests\UpdateLeaveCodeRequest;
 use App\Http\Resources\LeaveCodeResource;
+use Illuminate\Http\Request;
 
 class LeaveCodeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return LeaveCodeResource::collection(LeaveCode::paginate(20));
+        return LeaveCodeResource::collection(LeaveCode::paginate($request->per_page));
     }
 
     /**

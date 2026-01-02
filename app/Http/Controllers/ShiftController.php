@@ -6,15 +6,16 @@ use App\Models\Shift;
 use App\Http\Requests\StoreShiftRequest;
 use App\Http\Requests\UpdateShiftRequest;
 use App\Http\Resources\ShiftResource;
+use Illuminate\Http\Request;
 
 class ShiftController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return ShiftResource::collection(Shift::paginate(20));
+        return ShiftResource::collection(Shift::paginate($request->per_page));
     }
 
     /**

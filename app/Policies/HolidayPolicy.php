@@ -21,7 +21,7 @@ class HolidayPolicy
      */
     public function view(User $user, Holiday $holiday): bool
     {
-        return false;
+        return $user->id === 1;
     }
 
     /**

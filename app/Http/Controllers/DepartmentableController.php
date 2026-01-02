@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Departmentable;
 use App\Http\Requests\StoreDepartmentableRequest;
 use App\Http\Requests\UpdateDepartmentableRequest;
+use Illuminate\Http\Request;
 
 class DepartmentableController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
     }

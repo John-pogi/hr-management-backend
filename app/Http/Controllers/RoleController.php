@@ -6,15 +6,16 @@ use App\Models\Role;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\RoleResource;
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return RoleResource::collection(Role::paginate(20));
+        return RoleResource::collection(Role::paginate($request->per_page));
     }
 
     /**
