@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Companies\CompanyController;
 use App\Http\Controllers\Companies\CompanyDeparment;
 use App\Http\Controllers\Companies\CompanyEmployeeController;
+use App\Http\Controllers\CreditController;
 use App\Http\Controllers\Department\DeparmentCompanyController;
 use App\Http\Controllers\Department\DepartmentController;
 
@@ -41,8 +42,9 @@ Route::apiResource('companies',                CompanyController::class);
 
 Route::apiResource('companies.employees', CompanyEmployeeController::class)
     ->only(['index']);
+    
 Route::apiResource('companies.departments', CompanyDeparment::class)
-    ->only(['index']);
+    ->only(['index','post']);
     
 // Departments
 Route::apiResource('departments',              DepartmentController::class);
@@ -82,6 +84,7 @@ Route::apiResource('shifts',                   ShiftController::class);
 
 Route::apiResource('supervisors',              SupervisorController::class);
 Route::apiResource('uploads',                  UploadController::class)->only(['store']);
+Route::apiResource('credits',                  CreditController::class)->only(['index']);
 Route::apiResource('users',                    UserController::class);
 
 Route::apiResource('schedules',                  ScheduleController::class);

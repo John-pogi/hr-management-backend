@@ -15,7 +15,7 @@ class CompanyController extends Controller
      */
     public function index(Request $request)
     {
-        return Company::paginate($request->per_page);
+        return Company::with(['departments'])->paginate($request->per_page);
     }
 
     /**

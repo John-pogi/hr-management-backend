@@ -18,7 +18,7 @@ class Company extends Model
         'logo',
     ];
 
-    public function deparments(): BelongsToMany
+    public function departments(): BelongsToMany
     {
         return $this->belongsToMany(Department::class,'departmentables');
     }

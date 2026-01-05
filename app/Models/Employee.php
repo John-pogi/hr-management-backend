@@ -33,6 +33,10 @@ class Employee extends Model
         return $this->hasMany(DTR::class);
     }
 
+    public function leaves(): HasMany{
+        return $this->hasMany(Leave::class);
+    }
+
     public function deparment(): BelongsTo{
         return $this->belongsTo(Department::class);
     }
@@ -49,6 +53,10 @@ class Employee extends Model
 
     public function ceoApproval(): HasOne{
         return $this->hasOne(Supervisor::class, 'employee_id','id');
+    }
+
+    public function usedLeaveCredits(){
+        return $this->leaves->where('status','approved');
     }
 
 }
