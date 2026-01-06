@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DTR extends Model
 {
@@ -20,6 +21,10 @@ class DTR extends Model
         'type',
     ]; 
 
+    public function employee():BelongsTo{
+        return $this->belongsTo(Employee::class);
+    }
+    
     public function getToDateAttribute()
     {
         if (!$this->date || !$this->time) {

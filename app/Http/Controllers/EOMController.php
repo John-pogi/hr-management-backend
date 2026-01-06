@@ -18,7 +18,65 @@ class EOMController extends Controller
      */
     public function index(Request $request)
     {
-        return EOMResource::collection(EOM::paginate($request->per_page));
+
+        
+        $status = $request->input('status');
+        $companyID = $request->input('company_id');
+        $departmentID = $request->input('department_id');
+        $search = $request->input('search');
+        $from = $request->input('from');
+        $to = $request->input('to');
+        $status = $request->input('status');
+
+        $eoms = EOM::with(['employee','employee.company','employee.deparment'])
+        
+         ->when($companyID, function($qb) use($companyID){
+                $qb->whereHas('employee.company', function($qb) use($companyID){
+                    $qb->where('id',$companyID);
+                });
+            })
+             ->when($status, function($qb) use($status){
+
+                    switch($status){
+                        case 'absent':
+                            $qb->whereNull('time_in');
+                            $qb->whereNull('time_out');
+                            break;
+                        case 'partial':
+                            $qb->where(function($qb){
+                                $qb->whereNull('time_in');
+                                $qb->whereNotNull('time_out');
+                            })->orWhere(function($qb){
+                                $qb->whereNotNull('time_in');
+                                $qb->whereNull('time_out');
+                            });
+                            break;
+                        case 'present':
+                                 $qb->whereNotNull('time_in');
+                                 $qb->whereNotNull('time_out');
+                        break;
+                    }
+            })
+            ->when($from, function($qb) use($from){
+                 $qb->where('date', '>=', $from);
+            })
+            ->when($to, function($qb) use($to){
+                 $qb->where('date', '<=', $to);
+            })
+             ->when($departmentID, function($qb) use($departmentID){
+                 $qb->whereHas('employee.deparment', function($qb) use($departmentID){
+                        $qb->where('id',$departmentID);
+                 });
+            })
+              ->when($search, function($qb) use($search){
+                  $qb->whereHas('employee', function($qb) use($search){
+                    $qb->whereLike('fullname', '%'. $search.'%');
+                    $qb->orWhereLike('employee_number', '%'.$search.'%');
+                 });
+            })
+        ->paginate($request->per_page);
+
+        return EOMResource::collection($eoms);
     }
 
     /**

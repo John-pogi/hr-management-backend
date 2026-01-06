@@ -11,7 +11,7 @@ class StoreDTRRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreDTRRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'dtr' => 'required|array|min:1',
+            'dtr.*.employee_number' => 'required|array|min:1',
+            'dtr.*.type' => 'required',
+            'dtr.*.date' => 'required',
+            'dtr.*.time' => 'required',
         ];
     }
 }

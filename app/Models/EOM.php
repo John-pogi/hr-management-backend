@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EOM extends Model
 {
@@ -40,4 +41,8 @@ class EOM extends Model
         'shift_start' => 'datetime:H:i:s',
         'shift_end'   => 'datetime:H:i:s',
     ];
+
+    public function employee(): BelongsTo{
+        return $this->belongsTo(Employee::class);
+    }
 }
