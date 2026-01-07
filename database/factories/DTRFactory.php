@@ -21,7 +21,7 @@ class DTRFactory extends Factory
         $date = $this->faker->dateTimeBetween('-1 month', 'now');
 
         return [
-            'employee_id' => Employee::factory(),                // FK to employees
+            'employee_number' => Employee::find(1)->value('employee_number'),                // FK to employees
             'date'        => $date->format('Y-m-d'),
             'time'        => $this->faker->time('H:i:s'),
             'type'        => $this->faker->randomElement(['IN', 'OUT']),

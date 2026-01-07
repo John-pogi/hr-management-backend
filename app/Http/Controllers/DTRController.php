@@ -7,6 +7,7 @@ use App\Http\Requests\StoreDTRRequest;
 use App\Http\Requests\UpdateDTRRequest;
 use App\Http\Resources\DTRCollection;
 use App\Models\Employee;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -103,19 +104,15 @@ class DTRController extends Controller
 
     public function store(StoreDTRRequest $request){
         
-        $dtrs = $request->validate()['dtr'];
-
-        $employees = Employee::select(['id','employee_number'])
-            ->whereIn('employee_number',  array_map(function($dtr){
-                return $dtr['employee_number'];
-            }, $dtrs))
-        ->get();
-
-        $employees;
+        $dtrs = $request->validated()['dtr'];
         
-        // $dtr = DTR::create($request->validated());
+        $createdTime = Carbon::now();
 
-        // return response()->json($dtr, 201);
+        $normalize = array_map(fn($item) => [...$item, 'created_at' => $createdTime, 'updated_at' => $createdTime], $dtrs);
+
+        DTR::insert($normalize);
+
+        return response()->json(['messages' => 'inserted'], 201);
     }
 
     public function show(DTR $dTR){

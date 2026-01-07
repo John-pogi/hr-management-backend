@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Models\DTR;
+use App\Models\Employee;
 use App\Models\EOM;
 use App\Models\IrregEmployeeSchedule;
 use App\Models\Schedule;
@@ -18,6 +19,8 @@ class GenerateEOM
 
         $carbonDate = Carbon::now();
 
+        $employee = Employee::find($employeeID);
+
         $irregSchedule = IrregEmployeeSchedule::with(['schedule'])->where('employee_id', $employeeID)
             ->whereRaw('EXTRACT(MONTH FROM date) = ?', [$carbonDate->month])
             ->whereRaw('EXTRACT(YEAR FROM date) = ?', [$carbonDate->year])
@@ -31,10 +34,10 @@ class GenerateEOM
             throw new Exception('No schedule found');
         }
 
-        $this->irregularSchedule($employeeID, $scheduleID, $date);
+        $this->irregularSchedule($employeeID, $employee->employee_number, $scheduleID, $date);
     }
 
-    private function irregularSchedule($employeeID, $scheduleID, $date){
+    private function irregularSchedule($employeeID, $employeeNumber, $scheduleID, $date){
 
         $currentDate = new Carbon($date);
         $currentWeekNumber = $currentDate->weekOfMonth();
@@ -57,6 +60,7 @@ class GenerateEOM
 
             $this->generateEOM(
                     $employeeID,
+                    $employeeNumber,
                     $date,
                     $isNextDay ? new Carbon($date)->addDay()->toDate()->format('Y-m-d') : $date,
                     $shift->start_time,
@@ -135,7 +139,7 @@ class GenerateEOM
         // );
     }
 
-    private function generateEOM($employeeID, $dateIN, $dateOut, $shiftStart, $shiftEnd){
+    private function generateEOM($employeeID, $employeeNumber, $dateIN, $dateOut, $shiftStart, $shiftEnd){
 
         $totalUnpaidBreaks = 0;
         
@@ -147,13 +151,13 @@ class GenerateEOM
         ];
 
         $timeIN = DTR::where('type', 'IN')    
-            ->where('employee_id', $employeeID)
+            ->where('employee_number', $employeeNumber)
             ->where('date', $dateIN)
             ->orderBy('time', 'asc')
             ->first();
 
         $timeOUT = DTR::where('type', 'OUT')    
-            ->where('employee_id', $employeeID)
+            ->where('employee_number', $employeeNumber)
             ->where('date', $dateOut)
             ->orderBy('time', 'desc')
             ->first();

@@ -30,7 +30,7 @@ class Employee extends Model
     ];
 
     public function dtr(): HasMany{
-        return $this->hasMany(DTR::class);
+        return $this->hasMany(DTR::class, 'employee_number','employee_number');
     }
 
     public function leaves(): HasMany{

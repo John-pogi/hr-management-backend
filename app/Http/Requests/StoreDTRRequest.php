@@ -23,10 +23,10 @@ class StoreDTRRequest extends FormRequest
     {
         return [
             'dtr' => 'required|array|min:1',
-            'dtr.*.employee_number' => 'required|array|min:1',
-            'dtr.*.type' => 'required',
-            'dtr.*.date' => 'required',
-            'dtr.*.time' => 'required',
+            'dtr.*.employee_number' => 'required|exists:employees,employee_number',
+            'dtr.*.type' => 'required|string',
+            'dtr.*.date' => 'required|date_format:Y-m-d',
+            'dtr.*.time' => 'required|date_format:H:i:s',
         ];
     }
 }

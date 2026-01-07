@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('dtr', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')
-                 ->nullable()
-                  ->constrained('employees');
+
+            $table->string('employee_number');
+
+            $table->foreign('employee_number')
+                ->references('employee_number')
+                ->on('employees');
+
             $table->date('date');
             $table->time('time');
             $table->string('type');

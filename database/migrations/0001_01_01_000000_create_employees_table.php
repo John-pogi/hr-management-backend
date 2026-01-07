@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('philhealth')->nullable();
             $table->date('start_date')->nullable();
             $table->date('hired_date')->nullable();
-            $table->string('employee_number')->nullable();
+            $table->string('employee_number')->unique();
             $table->decimal('basic_pay', 12, 2)->default(0);
 
             $table->foreignId('department_id')

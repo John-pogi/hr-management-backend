@@ -15,14 +15,14 @@ class DTR extends Model
     protected $table = 'dtr';
 
      protected $fillable = [
-        'employee_id',
+        'employee_number',
         'date',
         'time',
         'type',
     ]; 
 
     public function employee():BelongsTo{
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class,'employee_number','employee_number');
     }
     
     public function getToDateAttribute()
@@ -36,5 +36,4 @@ class DTR extends Model
             ->format('Y-m-d H:i:s');
     }
     
- 
 }
