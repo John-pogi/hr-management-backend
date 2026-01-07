@@ -18,7 +18,7 @@ class LeaveController extends Controller
 
         $supervisor = $request->input('supervisor', 1);
 
-        $leaves = Leave::when($supervisor == 0, function($qb){
+        $leaves = Leave::with(['leaveType'])->when($supervisor == 0, function($qb){
            $qb->has('employee.ceoApproval');
         })->paginate(20);
 
@@ -38,7 +38,9 @@ class LeaveController extends Controller
      */
     public function store(StoreLeaveRequest $request)
     {
+
         $leave = Leave::create($request->validated());
+
         return new LeaveResource($leave);
     }
 
