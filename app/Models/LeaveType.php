@@ -13,6 +13,7 @@ class LeaveType extends Model
     protected $fillable = [
         'name',
         'credit',
+        'type'
     ];
 
     protected $casts = [

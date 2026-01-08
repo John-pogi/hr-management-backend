@@ -16,8 +16,12 @@ class LeaveTypeFactory extends Factory
      */
     public function definition(): array
     {
+        
+        $types = ['vl','sl'];
+
         return [
             'name'    => $this->faker->name(),
+            'type' => $this->faker->randomElement($types)
         ];
     }
 }

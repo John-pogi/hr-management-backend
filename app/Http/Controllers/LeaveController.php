@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Leave;
 use App\Http\Requests\StoreLeaveRequest;
 use App\Http\Requests\UpdateLeaveRequest;
 use App\Http\Resources\LeaveResource;
+use App\Models\Leave;
 use Illuminate\Http\Request;
 
 class LeaveController extends Controller
@@ -16,11 +16,15 @@ class LeaveController extends Controller
     public function index(Request $request)
     {
 
-        $supervisor = $request->input('supervisor', 1);
-
-        $leaves = Leave::with(['leaveType'])->when($supervisor == 0, function($qb){
-           $qb->has('employee.ceoApproval');
-        })->paginate(20);
+        $leaves = Leave::with([
+                'leaveType', 
+                'employee',
+                'employee.company',
+                'employee.deparment', 
+                'employee.leaves',
+                'employee.sickLeaves',
+                'employee.vacationLeaves',
+            ])->paginate(20);
 
         return LeaveResource::collection($leaves);
     }
@@ -66,6 +70,7 @@ class LeaveController extends Controller
     public function update(UpdateLeaveRequest $request, Leave $leave)
     {
         $leave->update($request->validated());
+
         return new LeaveResource($leave);
     }
 
@@ -75,6 +80,7 @@ class LeaveController extends Controller
     public function destroy(Leave $leave)
     {
         $leave->delete();
+
         return response()->json(['message' => 'Leave deleted successfully']);
     }
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('credit')->default(0.5);
+            $table->string('type');
             $table->timestamps();
         });
     }

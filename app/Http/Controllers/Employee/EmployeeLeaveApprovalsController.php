@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LeaveResource;
 use App\Models\Employee;
 use App\Models\Leave;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeLeaveApprovalsController extends Controller
 {
@@ -15,10 +17,22 @@ class EmployeeLeaveApprovalsController extends Controller
         $status = $request->input('status');
         $type = $request->input('type');
 
-        return Leave::whereHas('employee.supervisor', function($qb) use($employee){
-                $qb->where('employee_id', $employee->id);
+        $leaves = Leave::with([
+                'leaveType', 
+                'employee',
+                'employee.company',
+                'employee.deparment', 
+                'employee.leaves',
+                'employee.sickLeaves',
+                'employee.vacationLeaves',])
+            ->whereHas('employee', function($qb) use($employee){
+                $qb->where('company_id', $employee->company_id);
+                $qb->where('department_id', $employee->department_id);
+
+                $qb->whereHas('supervisor',function($qb) use($employee){
+                    $qb->where('employee_id',$employee->id);
+                });
             })
-            ->where('employee_id','!=', $employee->id)
             ->when($date, function($qb)use($date){
                     $qb->where('date',$date);
                 })
@@ -29,5 +43,7 @@ class EmployeeLeaveApprovalsController extends Controller
                 $qb->where('leave_type_id',$type);
             })
              ->paginate($request->per_page);
+
+            return LeaveResource::collection($leaves);
     }
 }

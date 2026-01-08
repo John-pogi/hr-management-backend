@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,7 +27,8 @@ class Employee extends Model
         'employee_number',
         'basic_pay',
         'philhealth',
-        'company_id'
+        'company_id',
+        'department_id'
     ];
 
     public function dtr(): HasMany{
@@ -38,17 +40,15 @@ class Employee extends Model
     }
 
     public function deparment(): BelongsTo{
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     public function company(): BelongsTo{
         return $this->belongsTo(Company::class);
     }
 
-    public function supervisor(): HasOne{
-        return $this->hasOne(Supervisor::class, 'department_id', 'department_id')
-            ->whereColumn('company_id', 'supervisors.company_id')
-            ->whereColumn('id', '!=','supervisors.employee_id');
+    public function supervisor(){
+        return $this->hasOne(Supervisor::class, 'department_id', 'department_id');
     }
 
     public function ceoApproval(): HasOne{
@@ -59,4 +59,32 @@ class Employee extends Model
         return $this->leaves->where('status','approved');
     }
 
+    public function sickLeaves(): HasMany{
+        return $this->hasMany(Leave::class)
+        ->whereHas('leaveType', fn($qb)=> $qb->where('type','sl'));
+    }
+
+    public function vacationLeaves(): HasMany{
+        return $this->hasMany(Leave::class)
+        ->whereHas('leaveType', fn($qb)=> $qb->where('type','vl'));
+    }
+
+    public function sickLeaveCredits(){
+        
+        $credit = 0.5 * Carbon::now()->month;
+
+        $approvedSickLeaves = $this->sickLeaves->where('status','approved')->sum('valid_credit');
+
+        return $credit - $approvedSickLeaves;
+    }
+
+    public function vacationLeaveCredits(){
+        
+        $credit = 0.5 * Carbon::now()->month;
+
+        $approvedSickLeaves = $this->vacationLeaves->where('status','approved')->sum('valid_credit');
+
+        return $credit - $approvedSickLeaves;
+    }
+    
 }

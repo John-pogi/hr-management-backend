@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,6 +31,19 @@ class LeaveResource extends JsonResource
                         'id' => $data->id,
                         'name' => $data->name,
                         'credit' => $data->credit,
+                        'type' => $data->type,
+                ];
+            }),
+            'employee' => $this->whenLoaded('employee', function($data){
+                return [
+                    'id' => $data->id,
+                    'name' => $data->fullname,
+                    'department_id' => $data?->deparment?->id,
+                    'department_name' => $data?->deparment?->name,
+                    'company_id' => $data?->company?->id,
+                    'company_name' => $data?->company?->name,
+                    'slCredit' => $data->sickLeaveCredits(),
+                    'vlCredit' => $data->vacationLeaveCredits(),
                 ];
             })
         ];
